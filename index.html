@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SheRide — Safe by Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --blush: #F2A7BB;
+  --rose: #D94F7A;
+  --deep: #8B1A4A;
+  --night: #0C0A12;
+  --ink: #12101E;
+  --slate: #1E1A2E;
+  --mist: #F9F4F7;
+  --gold: #E8C547;
+  --sage: #7BC4A0;
+  --text: #EDE8F0;
+  --muted: #8A7E94;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--night);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(12,10,18,0.88);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(242,167,187,0.1);
+}
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px; font-weight: 700;
+  background: linear-gradient(135deg, #F2A7BB, #D94F7A, #E8C547);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-chip {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+  padding: 8px 18px; border-radius: 100px;
+  border: 1px solid rgba(242,167,187,0.3);
+  color: var(--blush);
+  background: rgba(242,167,187,0.08);
+}
+.nav-invest {
+  font-size: 13px; font-weight: 600;
+  padding: 10px 22px; border-radius: 100px;
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  color: white; border: none; cursor: pointer;
+  transition: opacity 0.2s;
+}
+.nav-invest:hover { opacity: 0.85; }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative; overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 60% at 20% 40%, rgba(217,79,122,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 60%, rgba(139,26,74,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 10%, rgba(232,197,71,0.08) 0%, transparent 60%);
+}
+
+.noise {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--blush);
+  padding: 10px 24px; border-radius: 100px;
+  border: 1px solid rgba(242,167,187,0.25);
+  background: rgba(242,167,187,0.06);
+  margin-bottom: 36px;
+  animation: riseIn 0.9s ease both;
+}
+.live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 9vw, 112px);
+  font-weight: 700; line-height: 0.95;
+  margin-bottom: 28px;
+  animation: riseIn 0.9s 0.15s ease both;
+}
+.hero-h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--blush) 0%, var(--rose) 50%, var(--gold) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-sub {
+  font-size: clamp(15px, 2.2vw, 20px); font-weight: 300;
+  color: var(--muted); max-width: 560px; line-height: 1.7;
+  margin-bottom: 52px;
+  animation: riseIn 0.9s 0.3s ease both;
+}
+
+.hero-btns {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  animation: riseIn 0.9s 0.45s ease both;
+}
+.btn-glow {
+  padding: 16px 40px; border-radius: 100px; border: none;
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  color: white;
+  box-shadow: 0 8px 32px rgba(217,79,122,0.4), 0 0 0 1px rgba(255,255,255,0.05) inset;
+}
+.btn-glow:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(217,79,122,0.5); }
+.btn-outline {
+  padding: 16px 40px; border-radius: 100px;
+  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+  background: transparent; color: var(--text);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.btn-outline:hover { border-color: var(--blush); color: var(--blush); }
+
+@keyframes riseIn { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
+
+/* ===== STAT BAND ===== */
+.stat-band {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+}
+.stat-item {
+  padding: 36px 48px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  flex: 1; min-width: 180px;
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px; font-weight: 700;
+  background: linear-gradient(135deg, var(--blush), var(--rose));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  display: block; line-height: 1;
+}
+.stat-label { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* ===== APP DEMO ===== */
+.demo-wrap {
+  max-width: 1100px; margin: 0 auto;
+  padding: 100px 24px;
+  display: flex; gap: 64px; align-items: center;
+  flex-wrap: wrap; justify-content: center;
+}
+
+.demo-text { max-width: 380px; }
+.section-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--rose); margin-bottom: 16px;
+}
+.demo-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height: 1.15;
+  margin-bottom: 20px;
+}
+.demo-desc { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+
+.screen-tabs { display: flex; gap: 8px; margin-bottom: 28px; }
+.tab-btn {
+  padding: 9px 20px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1);
+  font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; background: transparent; color: var(--muted);
+}
+.tab-btn.active { background: var(--rose); color: white; border-color: var(--rose); }
+
+/* Phone */
+.phone-shell {
+  width: 290px; height: 580px; flex-shrink: 0;
+  background: var(--slate);
+  border-radius: 44px;
+  border: 2px solid rgba(255,255,255,0.08);
+  overflow: hidden; position: relative;
+  box-shadow: 0 48px 96px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04) inset,
+              inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.phone-notch {
+  width: 90px; height: 22px;
+  background: var(--night); border-radius: 0 0 14px 14px;
+  margin: 0 auto; position: relative; z-index: 5;
+}
+.phone-inner {
+  height: calc(100% - 22px);
+  padding: 0 14px 14px;
+  display: flex; flex-direction: column;
+}
+
+/* Screens */
+.pscreen { display: none; flex-direction: column; height: 100%; }
+.pscreen.active { display: flex; animation: fadeScreen 0.35s ease; }
+@keyframes fadeScreen { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
+
+/* Map screen */
+.map-view {
+  flex: 1; border-radius: 18px; overflow: hidden; position: relative;
+  background: linear-gradient(160deg, #1a1f2e 0%, #0d1018 100%);
+  margin-bottom: 14px;
+}
+.map-lines { position: absolute; inset: 0; }
+.ml { position: absolute; background: rgba(255,255,255,0.07); }
+.ml-h { height: 2px; left: 0; right: 0; }
+.ml-v { width: 2px; top: 0; bottom: 0; }
+.route-path {
+  position: absolute;
+  top: 30%; left: 15%;
+  width: 70%; height: 40%;
+  border: 2px dashed rgba(217,79,122,0.4);
+  border-radius: 40% 60% 50% 50%;
+  animation: routePulse 3s ease-in-out infinite;
+}
+@keyframes routePulse { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+
+.map-car {
+  position: absolute;
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--rose), var(--deep));
+  border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(217,79,122,0.6);
+  animation: carDrive 5s ease-in-out infinite;
+}
+.map-car::after { content: '🚗'; transform: rotate(45deg); font-size: 14px; }
+@keyframes carDrive {
+  0% { top:62%; left:18%; }
+  30% { top:42%; left:30%; }
+  60% { top:28%; left:55%; }
+  80% { top:35%; left:68%; }
+  100% { top:62%; left:18%; }
+}
+
+.dest-marker {
+  position: absolute; top:22%; right:18%;
+  width:28px; height:28px;
+  background: var(--gold); border-radius: 50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px;
+  box-shadow: 0 0 0 6px rgba(232,197,71,0.2);
+  animation: destPop 2.5s ease-in-out infinite;
+}
+@keyframes destPop { 0%,100%{box-shadow:0 0 0 6px rgba(232,197,71,0.2)} 50%{box-shadow:0 0 0 14px rgba(232,197,71,0.05)} }
+
+.eta-tag {
+  position: absolute; top:10px; left:10px;
+  background: rgba(12,10,18,0.9); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 7px 12px;
+  font-size: 11px; font-weight: 700; color: var(--gold);
+}
+
+.driver-panel {
+  background: rgba(30,26,46,0.95);
+  border-radius: 18px; padding: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.dp-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.dp-avatar {
+  width:44px; height:44px; border-radius:50%;
+  background: linear-gradient(135deg, var(--rose), #9B2080);
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; flex-shrink:0; position:relative;
+}
+.dp-verified {
+  position:absolute; bottom:-2px; right:-2px;
+  width:14px; height:14px; background:var(--sage);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:7px; color:white;
+}
+.dp-info { flex:1; }
+.dp-name { font-size:13px; font-weight:700; }
+.dp-meta { font-size:10px; color:var(--muted); margin-top:2px; }
+.dp-stars { color:var(--gold); font-size:9px; }
+.dp-actions { display:flex; gap:7px; }
+.dp-btn {
+  flex:1; padding:9px 6px; border-radius:10px; border:none;
+  font-family:'Outfit',sans-serif; font-size:10px; font-weight:700;
+  cursor:pointer; transition:transform 0.15s;
+}
+.dp-btn:hover { transform:scale(1.04); }
+.dp-primary { background:var(--rose); color:white; }
+.dp-secondary { background:rgba(255,255,255,0.06); color:var(--text); }
+
+/* Book screen */
+.book-title { font-size:15px; font-weight:700; padding:12px 0 10px; }
+.ride-options { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.ride-opt {
+  background: rgba(30,26,46,0.8);
+  border-radius:14px; padding:12px;
+  border:2px solid transparent;
+  display:flex; align-items:center; gap:10px;
+  cursor:pointer; transition:all 0.2s;
+}
+.ride-opt.sel { border-color:var(--rose); background:rgba(217,79,122,0.08); }
+.ride-opt:hover { border-color:rgba(217,79,122,0.3); }
+.ride-icon {
+  width:40px; height:40px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+}
+.ri-she { background:rgba(217,79,122,0.15); }
+.ri-std { background:rgba(255,255,255,0.05); }
+.ride-info { flex:1; }
+.ride-name { font-size:13px; font-weight:700; }
+.ride-desc { font-size:10px; color:var(--muted); margin-top:2px; }
+.ride-price { font-size:13px; font-weight:700; color:var(--gold); }
+
+.safety-row {
+  background:rgba(30,26,46,0.8); border-radius:14px; padding:12px;
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px; border:1px solid rgba(255,255,255,0.04);
+}
+.safety-label { font-size:12px; font-weight:600; }
+.safety-sub { font-size:10px; color:var(--muted); }
+.toggle-pill {
+  width:38px; height:20px; background:var(--rose);
+  border-radius:100px; position:relative; cursor:pointer;
+}
+.toggle-pill::after {
+  content:''; position:absolute; top:2px; right:2px;
+  width:16px; height:16px; background:white; border-radius:50%;
+}
+
+.confirm-book {
+  padding:12px; border-radius:12px; border:none; width:100%;
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:700;
+  background:linear-gradient(135deg,var(--rose),var(--deep));
+  color:white; cursor:pointer;
+}
+
+/* Confirmed screen */
+.conf-top { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.conf-ring {
+  width:72px; height:72px; border-radius:50%;
+  background:linear-gradient(135deg,var(--rose),var(--deep));
+  display:flex; align-items:center; justify-content:center;
+  font-size:30px; margin-bottom:14px;
+  box-shadow:0 0 0 12px rgba(217,79,122,0.12), 0 0 0 24px rgba(217,79,122,0.05);
+  animation:popRing 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
+}
+@keyframes popRing { from{transform:scale(0)} to{transform:scale(1)} }
+.conf-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; margin-bottom:4px; }
+.conf-sub { font-size:11px; color:var(--muted); margin-bottom:16px; }
+
+.conf-details {
+  background:rgba(30,26,46,0.8); border-radius:14px;
+  padding:12px; margin-bottom:12px; width:100%;
+}
+.conf-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:5px 0; font-size:11px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.conf-row:last-child { border-bottom:none; }
+.conf-row span:first-child { color:var(--muted); }
+.conf-row span:last-child { font-weight:700; }
+
+.safety-chips { display:flex; gap:6px; flex-wrap:wrap; width:100%; margin-bottom:10px; }
+.sc {
+  display:flex; align-items:center; gap:5px;
+  background:rgba(217,79,122,0.1); border:1px solid rgba(217,79,122,0.2);
+  border-radius:100px; padding:5px 10px;
+  font-size:9px; color:var(--blush); font-weight:600;
+}
+
+/* ===== FEATURES ===== */
+.features-sec {
+  padding: 80px 24px;
+  background: linear-gradient(180deg, var(--night) 0%, var(--ink) 100%);
+}
+.sec-center { text-align:center; }
+.sec-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,5vw,56px); font-weight:700; line-height:1.15;
+  margin-bottom:56px;
+}
+.features-grid {
+  max-width:960px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+.feat-card {
+  background: rgba(255,255,255,0.025);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:24px; padding:28px;
+  transition:all 0.25s; position:relative; overflow:hidden;
+}
+.feat-card::before {
+  content:''; position:absolute;
+  top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(242,167,187,0.3),transparent);
+}
+.feat-card:hover { transform:translateY(-5px); border-color:rgba(217,79,122,0.25); }
+.feat-em { font-size:32px; margin-bottom:16px; display:block; }
+.feat-title { font-size:16px; font-weight:700; margin-bottom:8px; }
+.feat-desc { font-size:13px; color:var(--muted); line-height:1.7; }
+
+/* ===== HOW IT WORKS ===== */
+.how-sec { max-width:760px; margin:0 auto; padding:80px 24px; }
+.how-steps { display:flex; flex-direction:column; }
+.how-step { display:flex; gap:20px; align-items:flex-start; position:relative; }
+.how-step:not(:last-child)::before {
+  content:''; position:absolute;
+  left:24px; top:52px; width:2px;
+  height:calc(100% - 20px);
+  background:linear-gradient(180deg,rgba(217,79,122,0.4),transparent);
+}
+.how-num {
+  width:48px; height:48px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700;
+  color:var(--blush); border:2px solid rgba(217,79,122,0.3);
+  background:rgba(217,79,122,0.08);
+}
+.how-body { padding:10px 0 40px; }
+.how-title { font-size:17px; font-weight:700; margin-bottom:5px; }
+.how-desc { font-size:13px; color:var(--muted); line-height:1.7; }
+
+/* ===== CTA ===== */
+.cta-sec {
+  text-align:center; padding:100px 24px;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(217,79,122,0.1) 0%,transparent 70%);
+  position:relative;
+}
+.cta-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(40px,7vw,80px); font-weight:700; line-height:1.05;
+  margin-bottom:20px;
+}
+.cta-title em {
+  font-style:italic;
+  background:linear-gradient(135deg,var(--blush),var(--rose),var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.cta-sub { font-size:17px; color:var(--muted); max-width:480px; margin:0 auto 44px; line-height:1.7; }
+
+.cta-cards { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:48px; }
+.cta-card {
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px; padding:20px 28px; text-align:left;
+}
+.cta-card-label { font-size:11px; font-weight:600; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+.cta-card-val { font-size:18px; font-weight:700; color:var(--blush); }
+
+/* ===== FOOTER ===== */
+footer {
+  text-align:center; padding:32px;
+  border-top:1px solid rgba(255,255,255,0.05);
+  font-size:13px; color:var(--muted);
+}
+footer strong { color:var(--blush); }
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--night); }
+::-webkit-scrollbar-thumb { background:var(--rose); border-radius:3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-text">SheRide</div>
+  <div class="nav-right">
+    <div class="nav-chip">🛡 Safe by Design</div>
+    <button class="nav-invest" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Invest in Us</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="noise"></div>
+  <div class="hero-eyebrow">
+    <div class="live-dot"></div>
+    India's First Women-Safety Rideshare · Launching 2025
+  </div>
+  <h1 class="hero-h1">Every woman<br>deserves to ride<br><em>without fear.</em></h1>
+  <p class="hero-sub">SheRide matches riders with verified women drivers — built for late nights, long commutes, and every moment safety matters most.</p>
+  <div class="hero-btns">
+    <button class="btn-glow" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See the App →</button>
+    <button class="btn-outline" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">For Investors</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stat-band">
+  <div class="stat-item"><span class="stat-num">60%</span><div class="stat-label">rideshare users are women</div></div>
+  <div class="stat-item"><span class="stat-num">₹15B</span><div class="stat-label">India rideshare market 2030</div></div>
+  <div class="stat-item"><span class="stat-num">78%</span><div class="stat-label">women want a safety option</div></div>
+  <div class="stat-item"><span class="stat-num">Zero</span><div class="stat-label">platforms solving this today</div></div>
+</div>
+
+<!-- APP DEMO -->
+<section id="demo">
+<div class="demo-wrap">
+  <!-- Text side -->
+  <div class="demo-text">
+    <div class="section-eyebrow">Live App Demo</div>
+    <h2 class="demo-title" id="demo-title">Track your driver in real time</h2>
+    <p class="demo-desc" id="demo-desc">Watch your verified SheRide driver approach live. Every driver is background-checked and ID-verified before their first ride.</p>
+    <div class="screen-tabs">
+      <button class="tab-btn active" onclick="switchTab(1,this)">Map</button>
+      <button class="tab-btn" onclick="switchTab(2,this)">Book</button>
+      <button class="tab-btn" onclick="switchTab(3,this)">Confirmed</button>
+    </div>
+    <button class="btn-glow" id="tab-cta" onclick="nextTab()">See Booking →</button>
+  </div>
+
+  <!-- Phone -->
+  <div class="phone-shell">
+    <div class="phone-notch"></div>
+    <div class="phone-inner">
+
+      <!-- Screen 1: Map -->
+      <div class="pscreen active" id="ps-1">
+        <div class="map-view">
+          <div class="map-lines">
+            <div class="ml ml-h" style="top:33%"></div>
+            <div class="ml ml-h" style="top:66%"></div>
+            <div class="ml ml-v" style="left:33%"></div>
+            <div class="ml ml-v" style="left:66%"></div>
+          </div>
+          <div class="route-path"></div>
+          <div class="map-car"></div>
+          <div class="dest-marker">📍</div>
+          <div class="eta-tag">⏱ 4 min away</div>
+        </div>
+        <div class="driver-panel">
+          <div class="dp-row">
+            <div class="dp-avatar">👩<div class="dp-verified">✓</div></div>
+            <div class="dp-info">
+              <div class="dp-name">Priya Sharma</div>
+              <div class="dp-meta"><span class="dp-stars">★★★★★</span> 4.98 · 1,842 trips</div>
+              <div class="dp-meta" style="color:var(--sage)">● ID Verified · Background Checked</div>
+            </div>
+          </div>
+          <div class="dp-actions">
+            <button class="dp-btn dp-secondary">📞 Call</button>
+            <button class="dp-btn dp-secondary">💬 Chat</button>
+            <button class="dp-btn dp-primary">🛡 Share Trip</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 2: Book -->
+      <div class="pscreen" id="ps-2">
+        <div class="book-title">Choose Your Ride</div>
+        <div class="ride-options">
+          <div class="ride-opt sel" onclick="selOpt(this)">
+            <div class="ride-icon ri-she">🛡</div>
+            <div class="ride-info">
+              <div class="ride-name">SheRide</div>
+              <div class="ride-desc">Verified women drivers only</div>
+            </div>
+            <div class="ride-price">₹180</div>
+          </div>
+          <div class="ride-opt" onclick="selOpt(this)">
+            <div class="ride-icon ri-std">🚗</div>
+            <div class="ride-info">
+              <div class="ride-name">Standard</div>
+              <div class="ride-desc">Any available driver</div>
+            </div>
+            <div class="ride-price">₹140</div>
+          </div>
+        </div>
+        <div class="safety-row">
+          <div>
+            <div class="safety-label">🔴 Live Safety Tracking</div>
+            <div class="safety-sub">Auto-share trip with family</div>
+          </div>
+          <div class="toggle-pill"></div>
+        </div>
+        <button class="confirm-book" onclick="switchTab(3,null)">Confirm SheRide →</button>
+      </div>
+
+      <!-- Screen 3: Confirmed -->
+      <div class="pscreen" id="ps-3">
+        <div class="conf-top">
+          <div class="conf-ring">✓</div>
+          <div class="conf-title">You're Protected!</div>
+          <div class="conf-sub">SheRide confirmed · Priya is on the way</div>
+          <div class="conf-details">
+            <div class="conf-row"><span>Driver</span><span>Priya Sharma 👩</span></div>
+            <div class="conf-row"><span>Vehicle</span><span>Honda City · White</span></div>
+            <div class="conf-row"><span>ETA</span><span>4 minutes</span></div>
+            <div class="conf-row"><span>Fare</span><span>₹180</span></div>
+            <div class="conf-row"><span>Safety PIN</span><span style="color:var(--gold)">7 4 2 1</span></div>
+          </div>
+          <div class="safety-chips">
+            <div class="sc">🛡 Verified</div>
+            <div class="sc">📍 Live Track</div>
+            <div class="sc">🆘 SOS</div>
+            <div class="sc">👨‍👩‍👧 Family Alert</div>
+          </div>
+        </div>
+        <button class="confirm-book" onclick="switchTab(1,null)">Track on Map →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-sec">
+  <div class="sec-center">
+    <div class="section-eyebrow" style="display:inline-block;margin-bottom:12px;">Why SheRide</div>
+    <h2 class="sec-title">Safety isn't a feature.<br><em style="font-style:italic;background:linear-gradient(135deg,var(--blush),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">It's the product.</em></h2>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card"><span class="feat-em">👩‍✈️</span><div class="feat-title">Women-Only Drivers</div><div class="feat-desc">Every driver is Aadhaar-verified, background-checked, and voluntarily part of our trusted network. No exceptions.</div></div>
+    <div class="feat-card"><span class="feat-em">🔐</span><div class="feat-title">Safety PIN System</div><div class="feat-desc">Confirm your driver with a unique PIN before entering the vehicle. No PIN match — the ride doesn't start.</div></div>
+    <div class="feat-card"><span class="feat-em">🆘</span><div class="feat-title">One-Tap SOS</div><div class="feat-desc">Discreet SOS button immediately calls 112 and sends your live GPS location to all emergency contacts.</div></div>
+    <div class="feat-card"><span class="feat-em">📍</span><div class="feat-title">Live Family Tracking</div><div class="feat-desc">Auto-share trip details via WhatsApp. Family sees your route live. Auto "arrived safe" message on drop-off.</div></div>
+    <div class="feat-card"><span class="feat-em">🌙</span><div class="feat-title">Midnight Mode</div><div class="feat-desc">After 10pm, enhanced safety protocols activate automatically — extra check-ins and priority dispatch.</div></div>
+    <div class="feat-card"><span class="feat-em">💰</span><div class="feat-title">Drivers Earn More</div><div class="feat-desc">85% payout vs Ola/Uber's 75%. Better earnings attract better drivers. Win-win for safety and income.</div></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-sec">
+  <div class="sec-center">
+    <div class="section-eyebrow">The Flow</div>
+    <h2 class="sec-title" style="font-size:clamp(28px,4vw,44px);margin-bottom:48px;">Simple. Safe. Always.</h2>
+  </div>
+  <div class="how-steps">
+    <div class="how-step"><div class="how-num">1</div><div class="how-body"><div class="how-title">Open SheRide & Enter Destination</div><div class="how-desc">Choose SheRide mode for a verified women driver. Enable live tracking to auto-share with your family via WhatsApp.</div></div></div>
+    <div class="how-step"><div class="how-num">2</div><div class="how-body"><div class="how-title">Get Matched in Under 60 Seconds</div><div class="how-desc">See your driver's photo, rating, vehicle details, and verification status before confirming. Full transparency, always.</div></div></div>
+    <div class="how-step"><div class="how-num">3</div><div class="how-body"><div class="how-title">Verify with Your Safety PIN</div><div class="how-desc">Confirm your driver shows the correct PIN before you get in. Your family gets an automatic notification the ride started.</div></div></div>
+    <div class="how-step"><div class="how-num">4</div><div class="how-body"><div class="how-title">Arrive Safe. Every Time.</div><div class="how-desc">Tracked the whole way. SOS always one tap away. Family gets "arrived safe" the moment you reach your destination.</div></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="cta">
+  <div class="section-eyebrow" style="display:inline-block;margin-bottom:16px;">Join the Mission</div>
+  <h2 class="cta-title">Back the startup<br>that puts women <em>first.</em></h2>
+  <p class="cta-sub">We're raising our pre-seed round to launch in Hyderabad and Bangalore. Join us in building India's most trusted rideshare platform.</p>
+  <button class="btn-glow" style="font-size:16px;padding:18px:48px;" onclick="alert('📧 Contact us: sheride.india@gmail.com\n📱 WhatsApp: +91 XXXXXXXXXX\n\nWe would love to connect!')">💌 Connect With Us</button>
+  <div class="cta-cards">
+    <div class="cta-card"><div class="cta-card-label">Raising</div><div class="cta-card-val">₹50 Lakh</div></div>
+    <div class="cta-card"><div class="cta-card-label">Stage</div><div class="cta-card-val">Pre-Seed</div></div>
+    <div class="cta-card"><div class="cta-card-label">Launch City</div><div class="cta-card-val">Hyderabad</div></div>
+    <div class="cta-card"><div class="cta-card-label">Founder</div><div class="cta-card-val">Technical</div></div>
+  </div>
+</section>
+
+<footer>
+  Built with ❤️ by <strong>SheRide</strong> · Because every woman deserves to get home safe.
+</footer>
+
+<script>
+const tabData = {
+  1: { title: 'Track your driver in real time', desc: 'Watch your verified SheRide driver approach live. Every driver is background-checked and ID-verified before their first ride.', cta: 'See Booking →', next: 2 },
+  2: { title: 'Choose SheRide mode', desc: 'Select a verified women driver and enable live safety tracking. Your family is automatically notified when your ride starts.', cta: 'See Confirmation →', next: 3 },
+  3: { title: 'Safety PIN + full protection', desc: 'Verify your driver with a unique PIN. SOS, live tracking, and automatic family alerts all activate the moment your ride begins.', cta: 'Back to Map →', next: 1 }
+};
+
+let cur = 1;
+
+function switchTab(n, btn) {
+  document.querySelectorAll('.pscreen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('ps-' + n).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else document.querySelectorAll('.tab-btn')[n-1].classList.add('active');
+  document.getElementById('demo-title').textContent = tabData[n].title;
+  document.getElementById('demo-desc').textContent = tabData[n].desc;
+  document.getElementById('tab-cta').textContent = tabData[n].cta;
+  cur = n;
+}
+
+function nextTab() { switchTab(tabData[cur].next, document.querySelectorAll('.tab-btn')[tabData[cur].next-1]); }
+function selOpt(el) { document.querySelectorAll('.ride-opt').forEach(o=>o.classList.remove('sel')); el.classList.add('sel'); }
+
+// Auto cycle
+setInterval(() => { nextTab(); }, 5000);
+</script>
+</body>
+</html>
